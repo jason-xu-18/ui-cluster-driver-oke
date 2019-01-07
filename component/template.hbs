@@ -1,0 +1,350 @@
+<form class="form">
+  {{#accordion-list showExpandAll=false as |al expandFn|}}
+
+    {{#if (eq step 1) }}
+      {{#accordion-list-item
+           title=(t 'clusterNew.oracleoke.access.title')
+           detail=(t 'clusterNew.oracleoke.access.detail')
+           showExpand=false
+           expandOnInit=true
+           expandAll=al.expandAll
+           expand=(action expandFn)
+      }}
+        <div class="row">
+          <div class="col span-6 mb-0">
+            <label class="acc-label" for="oracleoke-tenancy-id" >{{t 'clusterNew.oracleoke.tenancyID.label'}}{{field-required}}</label>
+            {{#input-or-display
+                 editable=isEditable
+                 value=config.tenancyID
+            }}
+              {{input
+                  classNames="form-control"
+                  id="oracleoke-tenancy-id"
+                  placeholder=(t 'clusterNew.oracleoke.tenancyID.placeholder')
+                  type="text"
+                  value=config.tenancyID
+              }}
+            {{/input-or-display}}
+          </div>
+          <div class="col span-6 mb-0">
+            <label class="acc-label" for="oracleoke-user-id">{{t 'clusterNew.oracleoke.userID.label'}}{{field-required}}</label>
+            {{#input-or-display
+                 editable=isEditable
+                 value=config.userID
+            }}
+              {{input type="text"
+                  classNames="form-control"
+                  id="oracleoke-user-id"
+                  placeholder=(t 'clusterNew.oracleoke.userID.placeholder')
+                  value=config.userID
+              }}
+            {{/input-or-display}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-region">{{t 'clusterNew.oracleoke.region.label'}}{{field-required}}</label>
+            {{#input-or-display
+                 editable=isEditable
+                 value=config.region
+            }}
+              {{new-select
+                  classNames="form-control"
+                  content=regionChoices
+                  id="oracleoke-region"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.region.prompt"
+                  value=config.region
+              }}
+            {{/input-or-display}}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col span-6 mb-0">
+            <label class="acc-label" for="oracleoke-fingerPrint">{{t 'clusterNew.oracleoke.fingerPrint.label'}}{{field-required}}</label>
+            {{#input-or-display
+                 editable=isEditable
+                 value=config.fingerPrint
+            }}
+              {{input
+                  classNames="form-control"
+                  id="oracleoke-fingerPrint"
+                  placeholder=(t 'clusterNew.oracleoke.fingerPrint.placeholder')
+                  type="text"
+                  value=config.fingerPrint
+              }}
+            {{/input-or-display}}
+          </div>
+
+          <div class="col span-6 mb-0">
+            <label class="acc-label" for="oracleoke-apiKey">{{t 'clusterNew.oracleoke.apiKey.label'}}{{field-required}}</label>
+            {{#input-or-display
+                 editable=isEditable
+                 value=config.apiKey
+            }}
+              {{input
+                  classNames="form-control"
+                  id="oracleoke-apiKey"
+                  placeholder=(t 'clusterNew.oracleoke.apiKey.placeholder')
+                  type="text"
+                  value=config.apiKey
+              }}
+            {{/input-or-display}}
+          </div>
+        </div>
+        
+        {{#unless editing}}
+          <div class="row">
+            <div class="col span-12 m-0">
+              {{banner-message color="bg-info" icon="icon-help" class="mb-0" message=(t 'clusterNew.oracleoke.access.help' htmlSafe=true)}}
+            </div>
+          </div>
+        {{/unless}}
+      {{/accordion-list-item}}
+      {{save-cancel
+          editing=isEditing
+          save="authenticate"
+          saveDisabled=saveDisabled
+          createLabel="clusterNew.oracleoke.authenticate.next"
+          cancel=close
+      }}
+    {{/if}}
+
+    {{#if (gte step 2) }}
+
+      {{#accordion-list-item
+           title=(t 'clusterNew.customize.title')
+           detail=(t 'clusterNew.customize.detail')
+           expandAll=al.expandAll
+           expandOnInit=true
+           expand=(action expandFn)
+      }}
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-kube-version">{{t 'clusterNew.oracleoke.kubernetesVersion.label'}}</label>
+
+              {{new-select
+                  classNames="form-control"
+                  content=versionChoices
+                  id="oracleoke-kube-version"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.kubernetesVersion.prompt"
+                  value=config.kubernetesVersion
+              }}
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-Network-Compartment">{{t 'clusterNew.oracleoke.NetworkCompartment.label'}}</label>
+
+              {{new-select
+                  classNames="form-control"
+                  content=compartmentChoice
+                  id="oracleoke-Network-Compartment"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.NetworkCompartment.prompt"
+                  value=netCompartment
+              }}
+
+          </div>
+        </div>
+          <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-VCN">{{t 'clusterNew.oracleoke.VCN.label'}}</label>
+
+              {{new-select
+                  classNames="form-control"
+                  content=vcnChoices
+                  id="oracleoke-VCN"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.VCN.prompt"
+                  value=vcn
+              }}
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-subnets">{{t 'clusterNew.oracleoke.subnets.label'}}</label>
+
+              {{new-select
+                  classNames="form-control"
+                  content=subnetsChoices
+                  id="oracleoke-subnets"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.subnets.prompt"
+                  value=subnets
+              }}
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-service-cidr">{{t 'clusterNew.oracleoke.serviceCidr.label'}}</label>
+
+              {{#input-or-display
+                 editable=isEditable
+                 value=config.serviceCidr
+            }}
+              {{input
+                  classNames="form-control"
+                  id="oracleoke-service-cidr"
+                  placeholder=(t 'clusterNew.oracleoke.serviceCidr.placeholder')
+                  type="text"
+                  value=config.serviceCidr
+              }}
+              {{/input-or-display}}
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-pods-cidr">{{t 'clusterNew.oracleoke.podsCidr.label'}}</label>
+
+              {{#input-or-display
+                 editable=isEditable
+                 value=config.podsCidr
+            }}
+              {{input
+                  classNames="form-control"
+                  id="oracleoke-pods-cidr"
+                  placeholder=(t 'clusterNew.oracleoke.podsCidr.placeholder')
+                  type="text"
+                  value=config.podsCidr
+              }}
+			    {{/input-or-display}}
+
+          </div>
+        </div>
+        
+      {{/accordion-list-item}}
+
+      {{#accordion-list-item
+           title=(t 'clusterNew.nodes.title')
+           detail=(t 'clusterNew.nodes.detail')
+           showExpand=false
+           expandOnInit=true
+           expandAll=al.expandAll
+           expand=(action expandFn)
+      }}
+          <div class="row">
+            <div class="col span-6">
+              <label class="acc-label" for="oracleoke-nodepool-name">{{t 'clusterNew.oracleoke.nodepool.label'}}</label>
+              {{#input-or-display
+                   editable=isEditable
+                   value=nodepoolName
+              }}
+                {{input
+                    classNames="form-control"
+                    id="oracleoke-nodepool-name"
+                    placeholder=(t 'clusterNew.oracleoke.nodepool.placeholder')
+                    type="text"
+                    value=nodepoolName
+                }}
+              {{/input-or-display}}
+            </div>
+          </div>
+          <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-nodepool-version">{{t 'clusterNew.oracleoke.nodepoolVersion.label'}}</label>
+
+              {{new-select
+                  classNames="form-control"
+                  content=versionChoices
+                  id="oracleoke-nodepool-version"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.noodpoolVersion.prompt"
+                  value=config.noodpoolVersion
+              }}
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-nodepool-image">{{t 'clusterNew.oracleoke.nodepoolImage.label'}}</label>
+
+              {{new-select
+                  classNames="form-control"
+                  content=imageChoices
+                  id="oracleoke-nodepool-image"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.nodepoolImage.prompt"
+                  value=config.nodepoolImage
+              }}
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-nodepool-shape">{{t 'clusterNew.oracleoke.nodepoolShape.label'}}</label>
+
+              {{new-select
+                  classNames="form-control"
+                  content=shapeChoices
+                  id="oracleoke-nodepool-shape"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.nodepoolShape.prompt"
+                  value=config.nodepoolShape
+              }}
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col span-6">
+            <label class="acc-label" for="oracleoke-subnets">{{t 'clusterNew.oracleoke.subnets.label'}}</label>
+
+              {{new-select
+                  classNames="form-control"
+                  content=subnetsChoices
+                  id="oracleoke-subnets"
+                  localizedPrompt=true
+                  prompt="clusterNew.oracleoke.subnets.prompt"
+                  value=subnets
+              }}
+
+          </div>
+        </div>
+
+          <div class="row">
+            <div class="col span-6">
+              <label class="acc-label" for="oracleoke-nodepool-quantity">{{t 'clusterNew.oracleoke.nodepoolQuantity.label'}}</label>
+              {{input-number
+                  id="oracleoke-nodepool-quantity"
+                  min=1
+                  value=config.nodepoolQuantity
+              }}
+            </div>
+          </div>
+        
+
+        <div class="row">
+          <div class="col span-12">
+            <label class="acc-label" for="oracleoke-nodepool-ssh-pub-key">{{t 'clusterNew.oracleoke.ssh.label'}}{{field-required}}</label>
+            {{#input-or-display
+                 editable=isEditable
+                 value=config.sshPublicKeyContents
+            }}
+              {{textarea
+                  id="oracleoke-nodepool-ssh-pub-key"
+                  value=config.sshPublicKeyContents
+                  classNames="form-control no-resize"
+                  rows="3"
+              }}
+            {{/input-or-display}}
+          </div>
+        </div>
+      {{/accordion-list-item}}
+
+      {{save-cancel editing=isEditing  save="driverSave" cancel=close}}
+    {{/if}}
+
+
+
+  {{/accordion-list}}
+
+  {{top-errors errors=errors}}
+  {{top-errors errors=otherErrors}}
+  {{top-errors errors=clusterErrors}}
+</form>
